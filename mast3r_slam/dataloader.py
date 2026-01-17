@@ -318,6 +318,11 @@ class Intrinsics:
 
 
 def load_dataset(dataset_path):
+    # Check for Insta360 X5 streaming dataset
+    if dataset_path.startswith("insta360:"):
+        from mast3r_slam.insta360_loader import parse_insta360_dataset
+        return parse_insta360_dataset(dataset_path)
+
     split_dataset_type = dataset_path.split("/")
     if "tum" in split_dataset_type:
         return TUMDataset(dataset_path)
@@ -332,7 +337,11 @@ def load_dataset(dataset_path):
     if "webcam" in split_dataset_type:
         return Webcam()
 
+    # Check for .insv Insta360 files
     ext = split_dataset_type[-1].split(".")[-1]
+    if ext == "insv":
+        from mast3r_slam.insta360_loader import Insta360Dataset
+        return Insta360Dataset(dataset_path)
     if ext in ["mp4", "avi", "MOV", "mov"]:
         return MP4Dataset(dataset_path)
     return RGBFiles(dataset_path)
