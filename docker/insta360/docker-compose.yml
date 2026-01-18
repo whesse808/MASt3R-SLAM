@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mast3r-slam:
+    build:
+      context: ../..
+      dockerfile: docker/insta360/Dockerfile
+    image: mast3r-slam-insta360:latest
+    container_name: mast3r-slam
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+    volumes:
+      # Mount your video files here
+      - ./data:/data
+      # Mount output directory for results
+      - ./output:/workspace/MASt3R-SLAM/logs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # Example: process an Insta360 video
+    # command: >
+    #   python main.py
+    #   --dataset /data/your_video.insv
+    #   --config config/base.yaml
+    #   --no-viz

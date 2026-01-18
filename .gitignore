@@ -1,5 +1,13 @@
 checkpoints/
 
+# Test/QA output directories
+qa_frame*/
+qa_new_video/
+output*/
+
+# Docker build artifacts (scripts copied for COPY)
+docker/insta360/scripts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

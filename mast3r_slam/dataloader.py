@@ -318,7 +318,17 @@ class Intrinsics:
 
 
 def load_dataset(dataset_path):
-    # Check for Insta360 X5 streaming dataset
+    # Check for Insta360 X5 multi-pass streaming dataset (VIEW-FIRST ordering)
+    if dataset_path.startswith("insta360mp:"):
+        from mast3r_slam.insta360_multipass_loader import parse_insta360_multipass_dataset
+        return parse_insta360_multipass_dataset(dataset_path)
+
+    # Check for Insta360 X5 multi-view streaming dataset
+    if dataset_path.startswith("insta360mv:"):
+        from mast3r_slam.insta360_multiview_loader import parse_insta360_multiview_dataset
+        return parse_insta360_multiview_dataset(dataset_path)
+
+    # Check for Insta360 X5 single-view streaming dataset
     if dataset_path.startswith("insta360:"):
         from mast3r_slam.insta360_loader import parse_insta360_dataset
         return parse_insta360_dataset(dataset_path)
